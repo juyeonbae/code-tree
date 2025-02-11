@@ -1,3 +1,5 @@
+# 문제 URL: https://www.codetree.ai/trails/complete/curated-cards/challenge-The-1D-wind-blows/description
+
 def chk(m, a, rowIdx, dr, visited) -> list[tuple[int, str]]:
     # 밀린 행 위아래 행과 열의 숫자와 일치하는지 확인
     moves = []

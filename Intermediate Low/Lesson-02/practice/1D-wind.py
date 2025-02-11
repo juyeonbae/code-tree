@@ -1,6 +1,4 @@
-# 문제 URL: https://www.codetree.ai/trails/complete/curated-cards/challenge-The-1D-wind-blows/description
-
-def chk(n, m, a, rowIdx, dr, visited) -> list[tuple[int, str]]:
+def chk(m, a, rowIdx, dr, visited) -> list[tuple[int, str]]:
     # 밀린 행 위아래 행과 열의 숫자와 일치하는지 확인
     moves = []
     # print(f"chk 함수 - rowIdx: {rowIdx}, dr: {dr}")
@@ -20,7 +18,7 @@ def chk(n, m, a, rowIdx, dr, visited) -> list[tuple[int, str]]:
                     break
 
     # 마지막 행이 아닌 경우 아래쪽 검사                      
-    if row < n-1:
+    if row < len(a)-1:
         next_row = row + 2  # 1-based index로 변환
         next_dir = 'R' if dr == 'L' else 'L'
 
@@ -35,13 +33,12 @@ def chk(n, m, a, rowIdx, dr, visited) -> list[tuple[int, str]]:
     return moves
 
 
-def move(n, m, a, rowIdx, dr) -> list[int]:
+def move(m, a, rowIdx, dr) -> list[int]:
     # 왼쪽으로 밀기 
     if dr == 'L':
         tmp = a[rowIdx-1][m-1]
         for i in range(m-1, 0, -1):
             a[rowIdx-1][i] = a[rowIdx-1][i-1]
-
         a[rowIdx-1][0] = tmp
 
     # 오른쪽으로 밀기 
@@ -49,32 +46,31 @@ def move(n, m, a, rowIdx, dr) -> list[int]:
         tmp = a[rowIdx-1][0]
         for i in range(1, m):
             a[rowIdx-1][i-1] = a[rowIdx-1][i]
-
         a[rowIdx-1][m-1] = tmp
 
     return a
 
 
-def solution(n, m, q, a, rowIdx, dr) -> list[int]:
+def solution(m, a, rowIdx, dr) -> list[int]:
     visited = set()
 
     # 첫 번째 이동
-    a = move(n, m, a, rowIdx, dr)
-    visited.add((rowIdx, dr))  # 첫 이동 기록록
+    a = move(m, a, rowIdx, dr)
+    visited.add((rowIdx, dr))  # 첫 이동 기록
 
-    # 전파파 이동 체크 및 실행
-    moves = chk(n, m, a, rowIdx, dr, visited)
+    # 전파 이동 체크 및 실행
+    moves = chk(m, a, rowIdx, dr, visited)
     while moves:
         new_moves = []
         for curr_row, curr_dir in moves:
             if (curr_row, curr_dir) in visited:
                 continue
 
-            a = move(n, m, a, curr_row, curr_dir)
+            a = move(m, a, curr_row, curr_dir)
             visited.add((curr_row, curr_dir))  # 이동 기록
 
             # 이동 후 추가 전파 이동 체크
-            add_moves = chk(n, m, a, curr_row, curr_dir, visited)
+            add_moves = chk(m, a, curr_row, curr_dir, visited)
             new_moves.extend(add_moves)
         moves = new_moves
 
@@ -87,7 +83,7 @@ def main():
     winds = [(int(r), d) for r, d in [input().split() for _ in range(q)]]
     
     for rowIdx, dr in winds:
-        a = solution(n, m, q, a, rowIdx, dr)
+        a = solution(m, a, rowIdx, dr)
 
     for row in a:
         print(*row)
@@ -110,8 +106,3 @@ if __name__ == "__main__":
     # 3 3 3 
 
     main()
-
-
-
-
-
